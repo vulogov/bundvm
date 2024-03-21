@@ -1,3 +1,6 @@
+pub mod cmd;
+pub mod stdlib;
+
 fn main() {
-    println!("Hello, world!");
+    cmd::init();
 }
