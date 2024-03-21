@@ -8,9 +8,7 @@ use rustyline::error::ReadlineError;
 use rustyline::{Editor};
 use steel::steel_vm::engine::Engine;
 
-pub fn vm_shell_cmd_execute(cmd: String) {
-    log::debug!("Executing shell command: len={}", &cmd.len());
-}
+
 
 pub fn vm_shell_cmd_execute_in_engine(e: &mut Engine, cmd: String) {
     match e.run(cmd.as_str()) {
@@ -21,6 +19,14 @@ pub fn vm_shell_cmd_execute_in_engine(e: &mut Engine, cmd: String) {
             log::error!("VM shell returns error: {:?}", err);
         }
     }
+}
+
+pub fn vm_shell_cmd_execute(cmd: String) {
+    log::debug!("Executing shell command: len={}", &cmd.len());
+    let mut e = Engine::new();
+    vm_shell::init_vm_shell(&mut e);
+    log::debug!("VM shell engine has been created");
+    vm_shell_cmd_execute_in_engine(&mut e, cmd);
 }
 
 pub fn vm_interactive_shell_execute(e: &mut Engine, nocolor: bool) {
@@ -62,7 +68,11 @@ pub fn vm_interactive_shell_execute(e: &mut Engine, nocolor: bool) {
             }
         }
     }
-    let _ = line.save_history(".bundvm_history");
+    log::debug!("Now saving history");
+    match line.save_history(".bundvm_history") {
+        Ok(_) => {}
+        Err(err) => log::error!("Error saving VM shell history file: {}", err),
+    }
     println!("{}", banner::banner(&"Zay Gezunt".to_string()));
 }
 
@@ -73,12 +83,12 @@ pub fn run(_c: &cmd::Cli, shell: cmd::Shell)  {
     log::debug!("VM shell engine has been created");
 
     if shell.source.stdin {
-        vm_shell_cmd_execute(getfile::get_file_from_stdin())
+        vm_shell_cmd_execute_in_engine(&mut e, getfile::get_file_from_stdin())
     } else {
         match &shell.source.file {
             Some(script_name) => {
                 match getfile::get_file_from_file(script_name.trim().to_string()) {
-                    Some(script) => vm_shell_cmd_execute(script),
+                    Some(script) => vm_shell_cmd_execute_in_engine(&mut e, script),
                     None => log::error!("Shell scipt is empty"),
                 }
             }
@@ -86,12 +96,17 @@ pub fn run(_c: &cmd::Cli, shell: cmd::Shell)  {
                 match &shell.source.url {
                     Some(script_name) => {
                         match getfile::get_file_from_uri(script_name.trim().to_string()) {
-                            Some(script) => vm_shell_cmd_execute(script),
+                            Some(script) => vm_shell_cmd_execute_in_engine(&mut e, script),
                             None => log::error!("Shell scipt is empty"),
                         }
                     }
                     None => {
-                        log::debug!("Shell commands pre-execution was not requested");
+                        match &shell.source.eval {
+                            Some(script) => vm_shell_cmd_execute_in_engine(&mut e, script.to_string()),
+                            None => {
+                                log::debug!("Shell commands pre-execution was not requested");
+                            }
+                        }
                     }
                 }
             }

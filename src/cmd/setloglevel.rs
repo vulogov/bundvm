@@ -12,19 +12,19 @@ pub fn setloglevel(c: &cmd::Cli) {
         }
         1 => {
             let env = Env::default()
-                .filter_or("BUND_LOG_LEVEL", "info");
+                .filter_or("BUND_LOG_LEVEL", "bundvm=info");
             env_logger::init_from_env(env);
             log::debug!("Set loglevel=info");
         }
         2 => {
             let env = Env::default()
-                .filter_or("BUND_LOG_LEVEL", "debug");
+                .filter_or("BUND_LOG_LEVEL", "bundvm=debug");
             env_logger::init_from_env(env);
             log::debug!("Set loglevel=debug");
         }
         _ => {
             let env = Env::default()
-                .filter_or("BUND_LOG_LEVEL", "trace");
+                .filter_or("BUND_LOG_LEVEL", "bundvm=trace");
             env_logger::init_from_env(env);
             log::debug!("Set loglevel=trace");
         }

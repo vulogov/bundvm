@@ -10,6 +10,8 @@ pub mod setloglevel;
 pub mod bund_version;
 pub mod bund_vm;
 pub mod bund_shell;
+pub mod bund_feed;
+pub mod bund_agent;
 
 use crate::stdlib;
 
@@ -63,6 +65,14 @@ pub fn init() {
     }
 
     match &cli.command {
+        Commands::Agent(agent) => {
+            log::debug!("Running BUND VM as an agent");
+            bund_agent::run(&cli, agent.clone());
+        }
+        Commands::Feed(feed) => {
+            log::debug!("Feeding VM networked endpoints");
+            bund_feed::run(&cli, feed.clone());
+        }
         Commands::Shell(shell) => {
             log::debug!("Enter in VM shell");
             bund_shell::run(&cli, shell.clone());
@@ -108,6 +118,8 @@ pub struct Cli {
 
 #[derive(Subcommand, Clone, Debug)]
 enum Commands {
+    Agent(Agent),
+    Feed(Feed),
     Shell(Shell),
     Vm(Vm),
     Version(Version),
@@ -115,7 +127,7 @@ enum Commands {
 
 #[derive(Debug, Clone, clap::Args)]
 #[group(required = true, multiple = false)]
-pub struct SrcArgGroup {
+pub struct VmSrcArgGroup {
     #[clap(long, action = clap::ArgAction::SetTrue, help="Take VM instructins from STDIN")]
     pub stdin: bool,
 
@@ -125,11 +137,41 @@ pub struct SrcArgGroup {
     #[clap(short, long, help="Filename of the file with VM instructions (full path)")]
     file: Option<String>,
 
-    #[clap(help="Eval instruction passed through command line", long, default_value_t = String::from(""))]
-    pub eval: String,
+    #[clap(help="Eval instruction passed through command line", long)]
+    pub eval: Option<String>,
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Skip evaluation")]
     pub none: bool,
+}
+
+#[derive(Debug, Clone, clap::Args)]
+#[group(required = false, multiple = false)]
+pub struct VmShellSrcArgGroup {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Take VM shell script from STDIN")]
+    pub stdin: bool,
+
+    #[clap(short, long, help="URL pointing to the file with VM shell script")]
+    url: Option<String>,
+
+    #[clap(short, long, help="Filename of the file with VM shell script (full path)")]
+    file: Option<String>,
+
+    #[clap(help="VM shell command passed through command line", long)]
+    pub eval: Option<String>,
+
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="Run BUND VM as an agent")]
+pub struct Agent {
+
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="Enter in VM shell")]
+pub struct Feed {
+    #[clap(flatten)]
+    source: VmSrcArgGroup,
 }
 
 #[derive(Args, Clone, Debug)]
@@ -139,7 +181,7 @@ pub struct Shell {
     pub nocolor: bool,
 
     #[clap(flatten)]
-    source: SrcArgGroup,
+    source: VmShellSrcArgGroup,
 }
 
 #[derive(Args, Clone, Debug)]
@@ -153,7 +195,7 @@ struct Version {
 #[clap(about="Execute VM commands.")]
 pub struct Vm {
     #[clap(flatten)]
-    source: SrcArgGroup,
+    source: VmSrcArgGroup,
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Drop into VM shell after execution")]
     pub shell: bool,
