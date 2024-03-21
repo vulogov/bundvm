@@ -5,7 +5,7 @@ use crate::stdlib::{getfile, banner};
 
 use yansi::Paint;
 use rustyline::error::ReadlineError;
-use rustyline::{Editor};
+use rustyline::{Editor, Config, EditMode};
 use steel::steel_vm::engine::Engine;
 
 
@@ -42,7 +42,12 @@ pub fn vm_interactive_shell_execute(e: &mut Engine, nocolor: bool) {
         Paint::disable();
     }
 
-    let mut line = Editor::<()>::new().unwrap();
+    let rl_config = Config::builder()
+        .history_ignore_space(true)
+        .edit_mode(EditMode::Emacs)
+        .build();
+
+    let mut line = Editor::<()>::with_config(rl_config).unwrap();
     if line.load_history(".bundvm_history").is_err() {
         log::warn!("No previous history discovered");
     }
