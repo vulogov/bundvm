@@ -9,6 +9,7 @@ pub mod setloglevel;
 
 pub mod bund_version;
 pub mod bund_vm;
+pub mod bund_shell;
 
 use crate::stdlib;
 
@@ -62,6 +63,10 @@ pub fn init() {
     }
 
     match &cli.command {
+        Commands::Shell(shell) => {
+            log::debug!("Enter in VM shell");
+            bund_shell::run(&cli, shell.clone());
+        }
         Commands::Vm(vm) => {
             log::debug!("Execute VM instructions");
             bund_vm::run(&cli, vm.clone());
@@ -103,20 +108,14 @@ pub struct Cli {
 
 #[derive(Subcommand, Clone, Debug)]
 enum Commands {
+    Shell(Shell),
     Vm(Vm),
     Version(Version),
 }
 
-#[derive(Args, Clone, Debug)]
-#[clap(about="Get the version of the VM")]
-struct Version {
-    #[clap(last = true)]
-    args: Vec<String>,
-}
-
 #[derive(Debug, Clone, clap::Args)]
 #[group(required = true, multiple = false)]
-pub struct VmSrcArgGroup {
+pub struct SrcArgGroup {
     #[clap(long, action = clap::ArgAction::SetTrue, help="Take VM instructins from STDIN")]
     pub stdin: bool,
 
@@ -129,15 +128,37 @@ pub struct VmSrcArgGroup {
     #[clap(help="Eval instruction passed through command line", long, default_value_t = String::from(""))]
     pub eval: String,
 
-    #[clap(long, action = clap::ArgAction::SetTrue, help="Run internal processing")]
-    pub internal: bool,
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Skip evaluation")]
+    pub none: bool,
 }
 
+#[derive(Args, Clone, Debug)]
+#[clap(about="Enter in VM shell")]
+pub struct Shell {
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Disable colors in shell")]
+    pub nocolor: bool,
+
+    #[clap(flatten)]
+    source: SrcArgGroup,
+}
+
+#[derive(Args, Clone, Debug)]
+#[clap(about="Get the version of the VM")]
+struct Version {
+    #[clap(last = true)]
+    args: Vec<String>,
+}
 
 #[derive(Args, Clone, Debug)]
 #[clap(about="Execute VM commands.")]
 pub struct Vm {
     #[clap(flatten)]
-    source: VmSrcArgGroup,
+    source: SrcArgGroup,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Drop into VM shell after execution")]
+    pub shell: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Disable colors in shell")]
+    pub nocolor: bool,
 
 }
