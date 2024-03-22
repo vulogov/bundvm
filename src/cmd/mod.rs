@@ -14,6 +14,7 @@ pub mod bund_feed;
 pub mod bund_agent;
 
 use crate::stdlib;
+use crate::vm;
 
 pub fn init() {
     let cli = Cli::parse();
@@ -63,7 +64,11 @@ pub fn init() {
         log::error!("ZENOH config not OK");
         return;
     }
-
+    log::debug!("Configuring VM");
+    let mut vm = vm::BUND.lock().unwrap();
+    vm.zc = config.clone();
+    drop(vm);
+    log::debug!("VM is ready");
     match &cli.command {
         Commands::Agent(agent) => {
             log::debug!("Running BUND VM as an agent");
@@ -199,6 +204,15 @@ pub struct Vm {
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Drop into VM shell after execution")]
     pub shell: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Drop into VM shell after error")]
+    pub shell_if_error: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Drop to default reading of instructions from stdin")]
+    pub inst_from_stdin: bool,
+
+    #[clap(long, action = clap::ArgAction::SetTrue, help="Display VM status at exit")]
+    pub vmstatus_at_exit: bool,
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Disable colors in shell")]
     pub nocolor: bool,

@@ -13,10 +13,10 @@ use steel::steel_vm::engine::Engine;
 pub fn vm_shell_cmd_execute_in_engine(e: &mut Engine, cmd: String) {
     match e.run(cmd.as_str()) {
         Ok(res) => {
-            log::info!("VM shell returns: {:?}", res);
+            log::trace!("VM shell returns: {:?}", res);
         }
         Err(err) => {
-            log::error!("VM shell returns error: {:?}", err);
+            log::trace!("VM shell returns error: {:?}", err);
         }
     }
 }

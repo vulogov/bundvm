@@ -29,3 +29,10 @@ pub fn vm_shell_quick_status() {
     println!("{}", table);
     drop(vm);
 }
+
+pub fn vm_shell_full_status() {
+    log::debug!("Displaying full status about VM");
+    let mut vm = vm::BUND.lock().unwrap();
+    vm.display_message("(full-status)".to_string(), "N/A".to_string());
+    drop(vm);
+}
