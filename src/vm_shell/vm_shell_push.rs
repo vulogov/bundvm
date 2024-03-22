@@ -48,12 +48,27 @@ pub fn vm_shell_push_string(s: String) {
     }
 }
 
-pub fn vm_shell_push_bool(b: bool) {
-    log::debug!("Pushing bool {} into stack", b);
+pub fn vm_shell_push_bool_true() {
+    log::debug!("Pushing bool true into stack");
     match vm_json::vm_json_bool::vm_json_numbers_push_bool(
         json!({
             "type":     "BOOLEAN",
-            "value":    b,
+            "value":    true,
+        })
+    ) {
+        Ok(_) => {}
+        Err(err) => {
+            vm_shell::vm_shell_error(format!("{}", err).to_string());
+        }
+    }
+}
+
+pub fn vm_shell_push_bool_false() {
+    log::debug!("Pushing bool false into stack");
+    match vm_json::vm_json_bool::vm_json_numbers_push_bool(
+        json!({
+            "type":     "BOOLEAN",
+            "value":    false,
         })
     ) {
         Ok(_) => {}
