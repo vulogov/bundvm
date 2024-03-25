@@ -1,12 +1,14 @@
 extern crate log;
+use easy_error::{Error};
+use crate::vm::BUNDCore;
 use rust_dynamic::value::{Value};
-use rust_dynamic::ctx::{Context, CtxApplicative, JUSTONE};
+use crate::vm::vm_applicatives::{BundApplicative, JUSTONE};
 
-fn stdlib_print_fun(_ctx: &dyn Context, _name: &str, _value: Value) -> Option<Value> {
-    None
+fn stdlib_print_fun(_ctx: &mut BUNDCore, _name: &str, _value: Value) -> Result<Option<Value>, Error> {
+    Ok(None)
 }
 
-pub fn init_stdlib(ctx: &mut dyn Context) {
+pub fn init_stdlib(ctx: &mut BUNDCore) {
     log::debug!("Init VM standard library: print");
-    ctx.register("print", CtxApplicative::new("print", JUSTONE, stdlib_print_fun));
+    ctx.register("print", BundApplicative::new("print", JUSTONE, stdlib_print_fun));
 }

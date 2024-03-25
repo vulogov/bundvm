@@ -4,8 +4,7 @@ use rust_twostack::ts::TS;
 use lazy_static::lazy_static;
 use std::sync::Mutex;
 use zenoh::config::{Config};
-use rust_dynamic::ctx::{CtxApplicative};
-use rust_dynamic::ctx::{Context};
+use crate::vm::vm_applicatives::{BundApplicative};
 
 pub mod vm_applicatives;
 pub mod vm_call;
@@ -15,7 +14,7 @@ pub mod vm_error;
 pub struct BUNDCore {
     pub version:        String,
     pub stack:          TS,
-    pub applicatives:   HashMap<String, VecDeque<CtxApplicative>>,
+    pub applicatives:   HashMap<String, VecDeque<BundApplicative>>,
     // bus
     pub zc:             Config,
     // vm behavioral

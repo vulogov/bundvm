@@ -13,8 +13,9 @@ pub fn vm_json_call(v: serde_json::Value) -> Result<(), Error> {
                         match value.as_str() {
                             Some(val_str) => {
                                 let mut vm = vm::BUND.lock().unwrap();
-                                vm.call(val_str.to_string());
+                                let res = vm.call(val_str.to_string());
                                 drop(vm);
+                                return res;
                             }
                             None => {
                                 bail!("Invalid JSON for instruction: Can not cast string for functor name");
@@ -33,5 +34,4 @@ pub fn vm_json_call(v: serde_json::Value) -> Result<(), Error> {
             bail!("Invalid JSON for instruction: Can not cast object");
         }
     }
-    Ok(())
 }
