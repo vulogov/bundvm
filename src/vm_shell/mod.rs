@@ -5,6 +5,9 @@ use crate::vm;
 pub mod vm_shell_status;
 pub mod vm_shell_push;
 pub mod vm_shell_pull;
+pub mod vm_shell_core;
+pub mod vm_shell_call;
+
 
 fn vm_shell_answer_function() -> i32 {
     42 as i32
@@ -28,4 +31,7 @@ pub fn init_vm_shell(e: &mut Engine) {
     e.register_fn("push-false", vm_shell_push::vm_shell_push_bool_false);
     e.register_fn("pull", vm_shell_pull::vm_shell_pull);
     e.register_fn("pull-raw", vm_shell_pull::vm_shell_pull_raw);
+    e.register_fn("vm-clear", vm_shell_core::vm_shell_clear);
+    e.register_fn("vm-call", vm_shell_call::vm_shell_call);
+
 }
