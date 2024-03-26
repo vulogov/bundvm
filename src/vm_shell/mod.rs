@@ -27,6 +27,7 @@ pub fn init_vm_shell(e: &mut Engine) {
     e.register_fn("push-integer", vm_shell_push::vm_shell_push_int);
     e.register_fn("push-float", vm_shell_push::vm_shell_push_float);
     e.register_fn("push-string", vm_shell_push::vm_shell_push_string);
+    e.register_fn("push-call", vm_shell_push::vm_shell_push_call);
     e.register_fn("push-true", vm_shell_push::vm_shell_push_bool_true);
     e.register_fn("push-false", vm_shell_push::vm_shell_push_bool_false);
     e.register_fn("push-list", vm_shell_push::vm_shell_push_empty_list);

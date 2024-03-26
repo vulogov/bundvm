@@ -92,3 +92,18 @@ pub fn vm_shell_push_empty_list() {
         }
     }
 }
+
+pub fn vm_shell_push_call(s: String) {
+    log::debug!("Pushing call {} into VM", s);
+    match vm_json::vm_json_call_object::vm_json_numbers_push_call(
+        json!({
+            "type":     "CALL",
+            "value":    s.clone(),
+        })
+    ) {
+        Ok(_) => {}
+        Err(err) => {
+            vm_shell::vm_shell_error(format!("{}", err).to_string());
+        }
+    }
+}

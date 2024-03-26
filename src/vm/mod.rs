@@ -11,6 +11,7 @@ pub mod vm_applicatives;
 pub mod vm_call;
 pub mod vm_callstack;
 pub mod vm_error;
+pub mod vm_push;
 
 #[derive(Clone)]
 pub struct BUNDCore {

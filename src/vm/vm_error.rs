@@ -12,6 +12,7 @@ impl BUNDCore {
         let mut table = Table::new();
         let mut stacks_table = Table::new();
         let mut current_stack_table = Table::new();
+        let mut call_stack_table = Table::new();
         table
             .load_preset(UTF8_FULL)
             .apply_modifier(UTF8_ROUND_CORNERS)
@@ -22,6 +23,10 @@ impl BUNDCore {
             .apply_modifier(UTF8_ROUND_CORNERS)
             .set_content_arrangement(ContentArrangement::Dynamic);
         current_stack_table
+            .load_preset(UTF8_FULL)
+            .apply_modifier(UTF8_ROUND_CORNERS)
+            .set_content_arrangement(ContentArrangement::Dynamic);
+        call_stack_table
             .load_preset(UTF8_FULL)
             .apply_modifier(UTF8_ROUND_CORNERS)
             .set_content_arrangement(ContentArrangement::Dynamic);
@@ -36,6 +41,10 @@ impl BUNDCore {
         table.add_row(vec![
                 Cell::new("Number of stacks").fg(Color::Blue),
                 Cell::new(format!("{}", self.stack.len())).fg(Color::White),
+        ]);
+        table.add_row(vec![
+                Cell::new("Size of call stack").fg(Color::Blue),
+                Cell::new(format!("{}", self.call_stack.len())).fg(Color::White),
         ]);
         table.add_row(vec![
                 Cell::new("Number of elements in current stack").fg(Color::Blue),
@@ -58,7 +67,14 @@ impl BUNDCore {
                 vec![Cell::new(format!("{:?}", e)).fg(Color::White),]
             );
         }
-
-        format!("{}\n\n{}\n\n{}", table, stacks_table, current_stack_table)
+        call_stack_table.add_row(
+            vec![Cell::new("Elements in call stack").fg(Color::Blue),]
+        );
+        for e in self.call_stack.iter() {
+            call_stack_table.add_row(
+                vec![Cell::new(format!("{:?}", e)).fg(Color::White),]
+            );
+        }
+        format!("{}\n\n{}\n\n{}\n\n{}", table, stacks_table, current_stack_table, call_stack_table)
     }
 }
