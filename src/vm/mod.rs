@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::collections::VecDeque;
 use rust_twostack::ts::TS;
+use rust_dynamic::value::{Value};
 use lazy_static::lazy_static;
 use std::sync::Mutex;
 use zenoh::config::{Config};
@@ -8,12 +9,14 @@ use crate::vm::vm_applicatives::{BundApplicative};
 
 pub mod vm_applicatives;
 pub mod vm_call;
+pub mod vm_callstack;
 pub mod vm_error;
 
 #[derive(Clone)]
 pub struct BUNDCore {
     pub version:        String,
     pub stack:          TS,
+    pub call_stack:     VecDeque<Value>,
     pub applicatives:   HashMap<String, VecDeque<BundApplicative>>,
     // bus
     pub zc:             Config,
@@ -26,6 +29,7 @@ impl BUNDCore {
         Self {
             version:        env!("CARGO_PKG_VERSION").to_string(),
             stack:          TS::new(),
+            call_stack:     VecDeque::new(),
             applicatives:   HashMap::new(),
             zc:             Config::default(),
             shell_if_error: false,

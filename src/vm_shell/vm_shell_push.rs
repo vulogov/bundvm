@@ -77,3 +77,18 @@ pub fn vm_shell_push_bool_false() {
         }
     }
 }
+
+pub fn vm_shell_push_empty_list() {
+    log::debug!("Pushing empty list into stack");
+    match vm_json::vm_json_list::vm_json_push_list(
+        json!({
+            "type":     "LIST",
+            "value":    null,
+        })
+    ) {
+        Ok(_) => {}
+        Err(err) => {
+            vm_shell::vm_shell_error(format!("{}", err).to_string());
+        }
+    }
+}

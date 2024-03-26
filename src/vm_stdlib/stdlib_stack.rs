@@ -90,6 +90,15 @@ fn stdlib_stacks_new_anonymous_stack_fun(ctx: &mut BUNDCore, _name: &str, _value
     Ok(None)
 }
 
+fn stdlib_stacks_drop_stack_fun(ctx: &mut BUNDCore, _name: &str, _value: Value) -> Result<Option<Value>, Error> {
+    log::debug!("Drop current stack");
+    ensure!(ctx.stack.len() > 0, "VM: stack is not deep enough for that operation");
+    if ctx.stack.len() > 0 {
+        ctx.stack.drop();
+    }
+    Ok(None)
+}
+
 pub fn init_stdlib(ctx: &mut BUNDCore) {
     log::debug!("Init VM standard library: stack");
     ctx.register("drop", BundApplicative::new("drop", NOEXTRA, stdlib_stack_drop_fun));
@@ -101,4 +110,5 @@ pub fn init_stdlib(ctx: &mut BUNDCore) {
     ctx.register("stacks-rotate-left", BundApplicative::new("stacks-rotate-left", NOEXTRA, stdlib_stacks_rotate_left_fun));
     ctx.register("stacks-rotate-right", BundApplicative::new("stacks-rotate-right", NOEXTRA, stdlib_stacks_rotate_right_fun));
     ctx.register("new-stack", BundApplicative::new("new-stack", NOEXTRA, stdlib_stacks_new_anonymous_stack_fun));
+    ctx.register("drop-stack", BundApplicative::new("drop-stack", NOEXTRA, stdlib_stacks_drop_stack_fun));
 }
