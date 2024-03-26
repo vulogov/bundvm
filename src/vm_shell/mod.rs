@@ -31,6 +31,7 @@ pub fn init_vm_shell(e: &mut Engine) {
     e.register_fn("push-true", vm_shell_push::vm_shell_push_bool_true);
     e.register_fn("push-false", vm_shell_push::vm_shell_push_bool_false);
     e.register_fn("push-list", vm_shell_push::vm_shell_push_empty_list);
+    e.register_fn("push-separator", vm_shell_push::vm_shell_push_separator);
     e.register_fn("pull", vm_shell_pull::vm_shell_pull);
     e.register_fn("pull-raw", vm_shell_pull::vm_shell_pull_raw);
     e.register_fn("vm-clear", vm_shell_core::vm_shell_clear);

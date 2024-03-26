@@ -93,6 +93,21 @@ pub fn vm_shell_push_empty_list() {
     }
 }
 
+pub fn vm_shell_push_separator() {
+    log::debug!("Pushing separator into stack");
+    match vm_json::vm_json_separator::vm_json_push_separator(
+        json!({
+            "type":     "SEPARATOR",
+            "value":    null,
+        })
+    ) {
+        Ok(_) => {}
+        Err(err) => {
+            vm_shell::vm_shell_error(format!("{}", err).to_string());
+        }
+    }
+}
+
 pub fn vm_shell_push_call(s: String) {
     log::debug!("Pushing call {} into VM", s);
     match vm_json::vm_json_call_object::vm_json_numbers_push_call(

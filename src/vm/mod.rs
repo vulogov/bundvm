@@ -19,6 +19,8 @@ pub struct BUNDCore {
     pub stack:          TS,
     pub call_stack:     VecDeque<Value>,
     pub applicatives:   HashMap<String, VecDeque<BundApplicative>>,
+    pub functors:       HashMap<String, VecDeque<BundApplicative>>,
+    pub lambdas:        HashMap<String, Value>,
     // bus
     pub zc:             Config,
     // vm behavioral
@@ -32,6 +34,8 @@ impl BUNDCore {
             stack:          TS::new(),
             call_stack:     VecDeque::new(),
             applicatives:   HashMap::new(),
+            functors:       HashMap::new(),
+            lambdas:        HashMap::new(),
             zc:             Config::default(),
             shell_if_error: false,
         }

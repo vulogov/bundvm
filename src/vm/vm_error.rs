@@ -47,6 +47,14 @@ impl BUNDCore {
                 Cell::new(format!("{}", self.call_stack.len())).fg(Color::White),
         ]);
         table.add_row(vec![
+                Cell::new("Number of functors").fg(Color::Blue),
+                Cell::new(format!("{}", self.functors.len())).fg(Color::White),
+        ]);
+        table.add_row(vec![
+                Cell::new("Registered lambdas").fg(Color::Blue),
+                Cell::new(format!("{}", self.lambdas.len())).fg(Color::White),
+        ]);
+        table.add_row(vec![
                 Cell::new("Number of elements in current stack").fg(Color::Blue),
                 Cell::new(format!("{}", self.stack.stack_len())).fg(Color::White),
         ]);

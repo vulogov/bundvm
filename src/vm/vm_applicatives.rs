@@ -62,14 +62,28 @@ impl BUNDCore {
         }
         true
     }
-    pub fn get_association(&self, _name: &str) -> Option<Value> {
+    pub fn get_functor(&self, name: &str) -> Option<BundApplicative> {
+        if self.functors.contains_key(&name.to_string()) {
+            match self.functors.get(&name.to_string()) {
+                Some(app) => return Some(app.back().unwrap().clone()),
+                None => return None,
+            }
+        }
         None
     }
-    pub fn register_association(&mut self, _name: &str, _v: Value) -> bool {
+    pub fn register_functor(&mut self, name: &str, f: BundApplicative) -> bool {
+        if ! self.functors.contains_key(&name.to_string()) {
+            let mut q: VecDeque<BundApplicative> = VecDeque::new();
+            q.push_back(f);
+            self.functors.insert(name.to_string(), q);
+        } else {
+            let q = self.functors.get_mut(&name.to_string());
+            q.expect("Functors queue expected").push_back(f);
+        }
         true
     }
-    pub fn have_functor(&self, _name: &str) -> bool {
-        false
+    pub fn have_functor(&self, name: &str) -> bool {
+        self.functors.contains_key(&name.to_string())
     }
     pub fn eval(&mut self, _app: Option<BundApplicative>, _value: Value)  -> Option<Value> {
         None
