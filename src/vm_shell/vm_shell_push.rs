@@ -110,7 +110,7 @@ pub fn vm_shell_push_separator() {
 
 pub fn vm_shell_push_call(s: String) {
     log::debug!("Pushing call {} into VM", s);
-    match vm_json::vm_json_call_object::vm_json_numbers_push_call(
+    match vm_json::vm_json_call_object::vm_json_push_call(
         json!({
             "type":     "CALL",
             "value":    s.clone(),
