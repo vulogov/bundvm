@@ -1,5 +1,5 @@
 extern crate log;
-use crate::vm::BUNDCore;
+use crate::vm::{BUNDCore, BundApplicative};
 use crate::vm::vm_applicatives::{NOEXTRA, JUSTONE, JUSTTWO, TAKEALL};
 use rust_dynamic::types::{NONE};
 use rust_dynamic::value::{Value};
@@ -89,14 +89,29 @@ impl BUNDCore {
         }
         Ok(())
     }
-    pub fn call_applicative(&mut self, fun: String) -> Result<(), Error> {
-        log::debug!("BUND VM: calling applicative: {}", &fun);
-        match self.resolve(fun.as_str()) {
-            Some(app) => {
-                log::debug!("BUND VM: applicative {} has been found", &fun);
-                match app.extra {
-                    NOEXTRA => {
-                        let param = Value::list();
+    pub fn call_bundapplicative(&mut self, app: BundApplicative) -> Result<(), Error> {
+        log::debug!("BUND VM: applicative {} has been found", &app.name);
+        match app.extra {
+            NOEXTRA => {
+                let param = Value::list();
+                match (app.f)(self, &app.name, param) {
+                    Ok(res) => {
+                        match res {
+                            Some(value) => {
+                                self.stack.push(value);
+                            }
+                            None => {},
+                        }
+                    }
+                    Err(err) => {
+                        return Err(err);
+                    }
+                }
+            }
+            JUSTONE => {
+                ensure!(self.stack.stack_len() >= 1, "VM: Stack is not deep enough for {} call. len()=1 required", &app.name);
+                match self.stack_take_one() {
+                    Ok(param) => {
                         match (app.f)(self, &app.name, param) {
                             Ok(res) => {
                                 match res {
@@ -111,85 +126,81 @@ impl BUNDCore {
                             }
                         }
                     }
-                    JUSTONE => {
-                        ensure!(self.stack.stack_len() >= 1, "VM: Stack is not deep enough for {} call. len()=1 required", &fun);
-                        match self.stack_take_one() {
-                            Ok(param) => {
-                                match (app.f)(self, &app.name, param) {
-                                    Ok(res) => {
-                                        match res {
-                                            Some(value) => {
-                                                self.stack.push(value);
-                                            }
-                                            None => {},
-                                        }
+                    Err(err) => {
+                        bail!("{}", err);
+                    }
+                }
+            }
+            JUSTTWO => {
+                ensure!(self.stack.stack_len() >= 2, "VM: Stack is not deep enough for {} call. len()=2 required", &app.name);
+                match self.stack_take_two() {
+                    Ok(param) => {
+                        match (app.f)(self, &app.name, param) {
+                            Ok(res) => {
+                                match res {
+                                    Some(value) => {
+                                        self.stack.push(value);
                                     }
-                                    Err(err) => {
-                                        return Err(err);
-                                    }
+                                    None => {},
                                 }
                             }
                             Err(err) => {
-                                bail!("{}", err);
+                                return Err(err);
                             }
                         }
                     }
-                    JUSTTWO => {
-                        ensure!(self.stack.stack_len() >= 2, "VM: Stack is not deep enough for {} call. len()=2 required", &fun);
-                        match self.stack_take_two() {
-                            Ok(param) => {
-                                match (app.f)(self, &app.name, param) {
-                                    Ok(res) => {
-                                        match res {
-                                            Some(value) => {
-                                                self.stack.push(value);
-                                            }
-                                            None => {},
-                                        }
+                    Err(err) => {
+                        bail!("{}", err);
+                    }
+                }
+            }
+            TAKEALL => {
+                ensure!(self.stack.stack_len() > 0, "VM: Stack is not deep enough for {} call", &app.name);
+                match self.stack_take_all() {
+                    Ok(param) => {
+                        match (app.f)(self, &app.name, param) {
+                            Ok(res) => {
+                                match res {
+                                    Some(value) => {
+                                        self.stack.push(value);
                                     }
-                                    Err(err) => {
-                                        return Err(err);
-                                    }
+                                    None => {},
                                 }
                             }
                             Err(err) => {
-                                bail!("{}", err);
+                                return Err(err);
                             }
                         }
                     }
-                    TAKEALL => {
-                        ensure!(self.stack.stack_len() > 0, "VM: Stack is not deep enough for {} call", &fun);
-                        match self.stack_take_all() {
-                            Ok(param) => {
-                                match (app.f)(self, &app.name, param) {
-                                    Ok(res) => {
-                                        match res {
-                                            Some(value) => {
-                                                self.stack.push(value);
-                                            }
-                                            None => {},
-                                        }
-                                    }
-                                    Err(err) => {
-                                        return Err(err);
-                                    }
-                                }
-                            }
-                            Err(err) => {
-                                bail!("{}", err);
-                            }
-                        }
+                    Err(err) => {
+                        bail!("{}", err);
                     }
-                    _ => bail!("VM: illegal operant for applicative"),
-                };
-                return Ok(());
+                }
+            }
+            _ => bail!("VM: illegal operant for applicative"),
+        };
+        return Ok(());
+    }
+    pub fn call_applicative(&mut self, fun: String) -> Result<(), Error> {
+        log::debug!("BUND VM: calling applicative: {}", &fun);
+        match self.resolve(fun.as_str()) {
+            Some(app) => {
+                return self.call_bundapplicative(app);
             }
             None => {
                 bail!("VM: applicative call failed, so such applicative registered");
             }
         }
     }
-    pub fn call_functor(&mut self, _fun: String) -> Result<(), Error> {
-        bail!("VM: functor call failed, not implemented");
+    pub fn call_functor(&mut self, fun: String) -> Result<(), Error> {
+        log::debug!("BUND VM: calling functor: {}", &fun);
+        match self.get_functor(fun.as_str()) {
+            Some(app) => {
+                return self.call_bundapplicative(app);
+            }
+            None => {
+                bail!("VM: functor call failed, so such functor registered");
+            }
+        }
     }
 }
