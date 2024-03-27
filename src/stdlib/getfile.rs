@@ -1,4 +1,4 @@
-
+extern crate log;
 use std::io::{self, BufRead};
 use curl::easy::{Easy2, Handler, WriteError};
 
@@ -22,7 +22,8 @@ pub fn get_file_from_stdin() -> String {
         // store user input
         user_input.push_str(&last_input);
     }
-    user_input
+    log::debug!("INPUT: get {} bytes from stdin", &user_input.len());
+    user_input.clone()
 }
 
 pub fn get_file_from_uri(some_url: String) -> Option<String>  {
