@@ -2,7 +2,7 @@ extern crate log;
 
 use std::env;
 use std::str::FromStr;
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, Parser, Subcommand, ValueEnum};
 use zenoh::config::{Config, ConnectConfig, ListenConfig, EndPoint, WhatAmI};
 
 pub mod setloglevel;
@@ -196,6 +196,11 @@ struct Version {
     args: Vec<String>,
 }
 
+#[derive(Debug, Copy, Clone, ValueEnum)]
+pub enum InstructionType {
+    Json,
+}
+
 #[derive(Args, Clone, Debug)]
 #[clap(about="Execute VM commands.")]
 pub struct Vm {
@@ -216,5 +221,8 @@ pub struct Vm {
 
     #[clap(long, action = clap::ArgAction::SetTrue, help="Disable colors in shell")]
     pub nocolor: bool,
+
+    #[clap(long, value_enum, default_value_t = InstructionType::Json, help="VM input instruction format")]
+    pub instruction_type: InstructionType,
 
 }

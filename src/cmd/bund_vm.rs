@@ -15,12 +15,30 @@ pub fn run(_c: &cmd::Cli, vm: cmd::Vm)  {
 
     if vm.source.stdin {
         log::debug!("Ready to get VM instructions from stdin");
-        vm_execute::instructions(getfile::get_file_from_stdin());
+        match vm_execute::instructions(getfile::get_file_from_stdin(), vm.clone()) {
+            Ok(_) => {},
+            Err(err) => {
+                log::debug!("VM: instruction execution returned: {}", err);
+                if vm.shell_if_error {
+                    cmd::bund_shell::vm_standalone_interactive_shell();
+                }
+            }
+        }
     } else {
         match &vm.source.file {
             Some(script_name) => {
                 match getfile::get_file_from_file(script_name.trim().to_string()) {
-                    Some(script) => vm_execute::instructions(script),
+                    Some(script) => {
+                        match vm_execute::instructions(script, vm.clone()) {
+                            Ok(_) => {},
+                            Err(err) => {
+                                log::debug!("VM: instruction execution returned: {}", err);
+                                if vm.shell_if_error {
+                                    cmd::bund_shell::vm_standalone_interactive_shell();
+                                }
+                            }
+                        }
+                    }
                     None => log::error!("Instructions set is empty"),
                 }
             }
@@ -28,17 +46,45 @@ pub fn run(_c: &cmd::Cli, vm: cmd::Vm)  {
                 match &vm.source.url {
                     Some(script_name) => {
                         match getfile::get_file_from_uri(script_name.trim().to_string()) {
-                            Some(script) => vm_execute::instructions(script),
+                            Some(script) => {
+                                match vm_execute::instructions(script, vm.clone()) {
+                                    Ok(_) => {},
+                                    Err(err) => {
+                                        log::debug!("VM: instruction execution returned: {}", err);
+                                        if vm.shell_if_error {
+                                            cmd::bund_shell::vm_standalone_interactive_shell();
+                                        }
+                                    }
+                                }
+                            }
                             None => log::error!("Instructions set is empty"),
                         }
                     }
                     None => {
                         match &vm.source.eval {
-                            Some(script) => vm_execute::instructions(script.to_string()),
+                            Some(script) => {
+                                match vm_execute::instructions(script.to_string(), vm.clone()) {
+                                    Ok(_) => {},
+                                    Err(err) => {
+                                        log::debug!("VM: instruction execution returned: {}", err);
+                                        if vm.shell_if_error {
+                                            cmd::bund_shell::vm_standalone_interactive_shell();
+                                        }
+                                    }
+                                }
+                            }
                             None => {
                                 if vm.inst_from_stdin {
                                     log::info!("Rolling down to reading VM instructions from stdin");
-                                    cmd::bund_shell::vm_shell_cmd_execute(getfile::get_file_from_stdin());
+                                    match vm_execute::instructions(getfile::get_file_from_stdin(), vm.clone()) {
+                                        Ok(_) => {},
+                                        Err(err) => {
+                                            log::debug!("VM: instruction execution returned: {}", err);
+                                            if vm.shell_if_error {
+                                                cmd::bund_shell::vm_standalone_interactive_shell();
+                                            }
+                                        }
+                                    }
                                 } else {
                                     log::info!("Rolling down to reading VM instructions from stdin is disabled");
                                 }

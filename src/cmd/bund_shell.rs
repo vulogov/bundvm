@@ -29,6 +29,14 @@ pub fn vm_shell_cmd_execute(cmd: String) {
     vm_shell_cmd_execute_in_engine(&mut e, cmd);
 }
 
+pub fn vm_standalone_interactive_shell() {
+    let mut e = Engine::new();
+    vm_shell::init_vm_shell(&mut e);
+    log::debug!("VM shell engine has been created");
+
+    vm_interactive_shell_execute(&mut e, false);
+}
+
 pub fn vm_interactive_shell_execute(e: &mut Engine, nocolor: bool) {
     log::debug!("Entering interactive shell");
     println!("{}", banner::bund_banner());
