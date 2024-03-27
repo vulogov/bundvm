@@ -36,5 +36,5 @@ pub fn init_vm_shell(e: &mut Engine) {
     e.register_fn("pull-raw", vm_shell_pull::vm_shell_pull_raw);
     e.register_fn("vm-clear", vm_shell_core::vm_shell_clear);
     e.register_fn("vm-call", vm_shell_call::vm_shell_call);
-
+    e.register_fn("vm-exec", vm_shell_call::vm_shell_execute);
 }

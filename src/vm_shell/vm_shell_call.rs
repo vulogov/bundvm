@@ -19,3 +19,20 @@ pub fn vm_shell_call(s: String) -> Result<(), String> {
     }
     Ok(())
 }
+
+pub fn vm_shell_execute(s: String) -> Result<(), String> {
+    log::debug!("Calling ether functor/applicative/lambda {} from shell", s);
+    match vm_json::vm_json_call::vm_json_call(
+        json!({
+            "type":     "CALL",
+            "value":    s,
+        })
+    ) {
+        Ok(_) => {}
+        Err(err) => {
+            vm_shell::vm_shell_error(format!("{}", err).to_string());
+            return Err(format!("{}", err).into());
+        }
+    }
+    Ok(())
+}

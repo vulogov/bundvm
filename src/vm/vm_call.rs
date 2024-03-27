@@ -68,10 +68,12 @@ impl BUNDCore {
         return Ok(res);
     }
     pub fn call(&mut self, fun: String) -> Result<(), Error> {
-        log::debug!("BUND VM: calling functor: {}", &fun);
         if self.have_applicative(&fun.clone()) {
+            log::debug!("BUND VM: applicative found: {}", &fun);
             match self.call_applicative(fun.clone()) {
-                Ok(_) => {},
+                Ok(_) => {
+                    return Ok(());
+                }
                 Err(err) => {
                     self.display_message(format!("BUND VM: applicative call of {} is lead to an error: {:?}", fun, err), "N/A".to_string());
                     return Err(err);
@@ -79,18 +81,22 @@ impl BUNDCore {
             }
 
         } else if self.have_functor(&fun.clone()) {
+            log::debug!("BUND VM: functor found: {}", &fun);
             match self.call_functor(fun.clone()) {
-                Ok(_) => {},
+                Ok(_) => {
+                    return Ok(());
+                }
                 Err(err) => {
                     self.display_message(format!("BUND VM: functor call of {} is lead to an error: {:?}", fun, err), "N/A".to_string());
                     return Err(err);
                 }
             }
+        } else {
+            self.display_message(format!("BUND VM: applicative/functor/lambda {} do not exists", fun), "N/A".to_string());
+            bail!("{}", format!("BUND VM: applicative/functor/lambda {} do not exists", fun));
         }
-        Ok(())
     }
     pub fn call_bundapplicative(&mut self, app: BundApplicative) -> Result<(), Error> {
-        log::debug!("BUND VM: applicative {} has been found", &app.name);
         match app.extra {
             NOEXTRA => {
                 let param = Value::list();
