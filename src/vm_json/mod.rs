@@ -6,3 +6,4 @@ pub mod vm_json_call;
 pub mod vm_json_list;
 pub mod vm_json_separator;
 pub mod vm_json_route;
+pub mod vm_json_execute;

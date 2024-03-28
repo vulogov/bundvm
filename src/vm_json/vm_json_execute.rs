@@ -1,7 +1,7 @@
 extern crate log;
 use serde_json;
 use crate::vm;
-use crate::vm_json;
+use crate::vm_json::*;
 use easy_error::{bail, ensure, Error};
 
 pub fn vm_json_execute(v: serde_json::Value) -> Result<(), Error> {
@@ -13,8 +13,8 @@ pub fn vm_json_execute(v: serde_json::Value) -> Result<(), Error> {
                     if value.is_string() {
                         match value.as_str() {
                             Some(val_str) => {
-                                let mut vm = vm::BUND.lock().unwrap();
-                                let is_app = vm.have_applicative();
+                                let vm = vm::BUND.lock().unwrap();
+                                let is_app = vm.have_applicative(val_str);
                                 drop(vm);
                                 if is_app {
                                     return vm_json_call::vm_json_call(v);

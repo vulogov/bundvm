@@ -30,6 +30,9 @@ pub fn vm_json_route(obj: serde_json::Value) -> Result<(), Error> {
                                 "LIST" => {
                                     return vm_json_list::vm_json_push_list(obj);
                                 }
+                                "CALL" => {
+                                    return vm_json_execute::vm_json_execute(obj);
+                                }
                                 _ => {
                                     bail!("JSON: Unknown instruction type: {}", type_str)
                                 }
