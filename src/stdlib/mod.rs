@@ -3,6 +3,7 @@ extern crate log;
 pub mod banner;
 pub mod getfile;
 pub mod hostname;
+pub mod string;
 pub mod vm_execute;
 pub mod vm_execute_json;
 pub mod vm_feed;

@@ -1,2 +1,3 @@
+# Single hash as the first character makes comment line
 {"type": "INTEGER", "value": 42}
 {"type": "INTEGER", "value": 42}

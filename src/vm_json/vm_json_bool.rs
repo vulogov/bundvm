@@ -16,7 +16,7 @@ pub fn vm_json_numbers_push_bool(v: serde_json::Value) -> Result<(), Error> {
                                 match value::Value::from(val_b) {
                                     Ok(val) => {
                                         let mut vm = vm::BUND.lock().unwrap();
-                                        vm.stack.push(val);
+                                        let _ = vm.push(val);
                                         drop(vm);
                                     }
                                     Err(err) => {

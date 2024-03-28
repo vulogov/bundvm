@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use easy_error::{bail, ensure, Error};
 use crate::vm::BUNDCore;
 use rust_dynamic::value::{Value};
-use rust_dynamic::types::{LIST,FIFO,QUEUE,LAMBDA, NONE, CALL};
+use rust_dynamic::types::{LIST, FIFO, QUEUE, NONE, CALL};
 use crate::vm::vm_applicatives::{BundApplicative, NOEXTRA};
 
 fn stdlib_terminate_and_execute_fun(ctx: &mut BUNDCore, _name: &str, _value: Value) -> Result<Option<Value>, Error> {
@@ -39,7 +39,7 @@ fn stdlib_terminate_and_execute_fun(ctx: &mut BUNDCore, _name: &str, _value: Val
         match ctx.stack.pull() {
             Some(mut value) => {
                 match value.dt {
-                    LIST | FIFO | QUEUE | LAMBDA => {
+                    LIST | FIFO | QUEUE => {
                         loop {
                             match scaffold.pop_front() {
                                 Some(pvalue) => {

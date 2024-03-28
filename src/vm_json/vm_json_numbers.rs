@@ -16,7 +16,7 @@ pub fn vm_json_numbers_push_integer(v: serde_json::Value) -> Result<(), Error> {
                                 match value::Value::from(val_64) {
                                     Ok(val) => {
                                         let mut vm = vm::BUND.lock().unwrap();
-                                        vm.stack.push(val);
+                                        vm.push(val);
                                         drop(vm);
                                     }
                                     Err(err) => {
@@ -56,7 +56,7 @@ pub fn vm_json_numbers_push_float(v: serde_json::Value) -> Result<(), Error> {
                                 match value::Value::from(val_64) {
                                     Ok(val) => {
                                         let mut vm = vm::BUND.lock().unwrap();
-                                        vm.stack.push(val);
+                                        vm.push(val);
                                         drop(vm);
                                     }
                                     Err(err) => {

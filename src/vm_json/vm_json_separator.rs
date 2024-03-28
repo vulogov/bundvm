@@ -9,7 +9,7 @@ pub fn vm_json_push_separator(v: serde_json::Value) -> Result<(), Error> {
     match v.as_object() {
         Some(_) => {
             let mut vm = vm::BUND.lock().unwrap();
-            vm.stack.push(value::Value::none());
+            vm.push(value::Value::none());
             drop(vm);
         }
         None => {

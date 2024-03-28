@@ -9,7 +9,7 @@ pub fn vm_json_push_list(v: serde_json::Value) -> Result<(), Error> {
     match v.as_object() {
         Some(_) => {
             let mut vm = vm::BUND.lock().unwrap();
-            vm.stack.push(value::Value::list());
+            vm.push(value::Value::list());
             drop(vm);
         }
         None => {

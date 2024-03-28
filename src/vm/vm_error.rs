@@ -51,6 +51,10 @@ impl BUNDCore {
                 Cell::new(format!("{}", self.functors.len())).fg(Color::White),
         ]);
         table.add_row(vec![
+                Cell::new("Lambda scaffolding").fg(Color::Blue),
+                Cell::new(format!("{}", self.scaffold.len())).fg(Color::White),
+        ]);
+        table.add_row(vec![
                 Cell::new("Registered lambdas").fg(Color::Blue),
                 Cell::new(format!("{}", self.lambdas.len())).fg(Color::White),
         ]);
