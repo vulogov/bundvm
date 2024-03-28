@@ -1,0 +1,4 @@
+{"type": "STRING", "value": "answer"}
+{"type": "LAMBDA", "value": null}
+{"type": "INTEGER", "value": 42}
+{"type": "CALL", "value": "endlambda"}

@@ -1,0 +1,6 @@
+(push-string "answer")
+(push-lambda)
+(push-integer 42)
+(vm-exec "endlambda")
+(display-vm-lambdas)
+(display-vm-lambda "answer")

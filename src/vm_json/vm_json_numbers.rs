@@ -16,8 +16,9 @@ pub fn vm_json_numbers_push_integer(v: serde_json::Value) -> Result<(), Error> {
                                 match value::Value::from(val_64) {
                                     Ok(val) => {
                                         let mut vm = vm::BUND.lock().unwrap();
-                                        vm.push(val);
+                                        let res = vm.push(val);
                                         drop(vm);
+                                        return res;
                                     }
                                     Err(err) => {
                                         bail!("Invalid JSON for instruction: {}", err);
@@ -41,7 +42,6 @@ pub fn vm_json_numbers_push_integer(v: serde_json::Value) -> Result<(), Error> {
             bail!("Invalid JSON for instruction: Can not cast object");
         }
     }
-    Ok(())
 }
 
 pub fn vm_json_numbers_push_float(v: serde_json::Value) -> Result<(), Error> {
@@ -56,8 +56,9 @@ pub fn vm_json_numbers_push_float(v: serde_json::Value) -> Result<(), Error> {
                                 match value::Value::from(val_64) {
                                     Ok(val) => {
                                         let mut vm = vm::BUND.lock().unwrap();
-                                        vm.push(val);
+                                        let res = vm.push(val);
                                         drop(vm);
+                                        return res;
                                     }
                                     Err(err) => {
                                         bail!("Invalid JSON for instruction: {}", err);
@@ -81,5 +82,4 @@ pub fn vm_json_numbers_push_float(v: serde_json::Value) -> Result<(), Error> {
             bail!("Invalid JSON for instruction: Can not cast object");
         }
     }
-    Ok(())
 }

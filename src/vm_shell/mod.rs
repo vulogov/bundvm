@@ -7,6 +7,7 @@ pub mod vm_shell_push;
 pub mod vm_shell_pull;
 pub mod vm_shell_core;
 pub mod vm_shell_call;
+pub mod vm_shell_lambda;
 
 
 fn vm_shell_answer_function() -> i32 {
@@ -32,9 +33,14 @@ pub fn init_vm_shell(e: &mut Engine) {
     e.register_fn("push-false", vm_shell_push::vm_shell_push_bool_false);
     e.register_fn("push-list", vm_shell_push::vm_shell_push_empty_list);
     e.register_fn("push-separator", vm_shell_push::vm_shell_push_separator);
+    e.register_fn("push-lambda", vm_shell_lambda::vm_shell_push_lambda);
     e.register_fn("pull", vm_shell_pull::vm_shell_pull);
     e.register_fn("pull-raw", vm_shell_pull::vm_shell_pull_raw);
     e.register_fn("vm-clear", vm_shell_core::vm_shell_clear);
     e.register_fn("vm-call", vm_shell_call::vm_shell_call);
     e.register_fn("vm-exec", vm_shell_call::vm_shell_execute);
+    e.register_fn("display-vm-lambdas", vm_shell_lambda::vm_shell_display_lambdas);
+    e.register_fn("display-vm-lambda", vm_shell_lambda::vm_shell_display_lambda);
+
+
 }

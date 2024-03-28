@@ -16,8 +16,9 @@ pub fn vm_json_numbers_push_bool(v: serde_json::Value) -> Result<(), Error> {
                                 match value::Value::from(val_b) {
                                     Ok(val) => {
                                         let mut vm = vm::BUND.lock().unwrap();
-                                        let _ = vm.push(val);
+                                        let res = vm.push(val);
                                         drop(vm);
+                                        return res;
                                     }
                                     Err(err) => {
                                         bail!("Invalid JSON for instruction: {}", err);
@@ -41,5 +42,4 @@ pub fn vm_json_numbers_push_bool(v: serde_json::Value) -> Result<(), Error> {
             bail!("Invalid JSON for instruction: Can not cast object");
         }
     }
-    Ok(())
 }

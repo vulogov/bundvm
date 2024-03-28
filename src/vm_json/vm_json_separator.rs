@@ -9,12 +9,12 @@ pub fn vm_json_push_separator(v: serde_json::Value) -> Result<(), Error> {
     match v.as_object() {
         Some(_) => {
             let mut vm = vm::BUND.lock().unwrap();
-            vm.push(value::Value::none());
+            let res = vm.push(value::Value::none());
             drop(vm);
+            return res;
         }
         None => {
             bail!("Invalid JSON for instruction: Can not cast object");
         }
     }
-    Ok(())
 }

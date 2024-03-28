@@ -13,6 +13,7 @@ pub fn run_json_instructions(inst: String) -> Result<(), Error> {
         }
         match serde_json::from_str::<serde_json::Value>(instruction) {
             Ok(json_inst) => {
+                log::trace!("Interuction: {:?}", &json_inst);
                 match vm_json_route(json_inst.clone()) {
                     Ok(_) => {},
                     Err(err) => {

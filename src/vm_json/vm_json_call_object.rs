@@ -15,8 +15,9 @@ pub fn vm_json_push_call(v: serde_json::Value) -> Result<(), Error> {
                             Some(val_str) => {
                                 let val_str_c = format!("{}", val_str);
                                 let mut vm = vm::BUND.lock().unwrap();
-                                let _ = vm.push(value::Value::call(val_str_c, Vec::new()));
+                                let res = vm.push(value::Value::call(val_str_c, Vec::new()));
                                 drop(vm);
+                                return res;
                             }
                             None => {
                                 bail!("Invalid JSON for instruction: Can not cast CALL");
@@ -35,5 +36,4 @@ pub fn vm_json_push_call(v: serde_json::Value) -> Result<(), Error> {
             bail!("Invalid JSON for instruction: Can not cast object");
         }
     }
-    Ok(())
 }

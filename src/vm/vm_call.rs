@@ -15,7 +15,7 @@ impl BUNDCore {
                         bail!("Separator found during stack reading");
                     }
                     _ => {
-                        res.push(value);
+                        res = res.push(value);
                     }
                 }
             }
@@ -35,7 +35,7 @@ impl BUNDCore {
                             bail!("Separator found during stack reading");
                         }
                         _ => {
-                            res.push(value);
+                            res = res.push(value);
                         }
                     }
                 }
@@ -56,7 +56,7 @@ impl BUNDCore {
                             bail!("Separator found during stack reading");
                         }
                         _ => {
-                            res.push(value);
+                            res = res.push(value);
                         }
                     }
                 }
