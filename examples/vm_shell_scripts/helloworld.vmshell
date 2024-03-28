@@ -1,1 +1,2 @@
-(println "Hello from VM shell")
+(push-string "Hello world!")
+(vm-exec "print")
