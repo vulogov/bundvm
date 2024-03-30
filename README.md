@@ -166,3 +166,16 @@ You can call *(full-status)* at any time.
 | (push-integer number) | Pushing integer value to the current position of current "stack-of-data" | (push-integer 42) |
 | (push-float number ) | Pushing float value to the current position of current "stack-of-data" | (push-float 3.14) |
 | (push-string string ) | Pushing string value to the current position of current "stack-of-data" | (push-string "Hello world") |
+| (push-true) | Pushing true boolean value to the current position of current "stack-of-data" | (push-true) |
+| (push-false) | Pushing false boolean value to the current position of current "stack-of-data" | (push-false) |
+| (push-list) | Pushing empty list value to the current position of current "stack-of-data" | (push-list) |
+| (push-separator) | Pushing data separator to the current position of current "stack-of-data". When VM found data separator, it will automatically create a new anonymous stack or stop processing TAKEALL parameters | (push-separator) |
+| (push-lambda) | Pushing new empty lambda into a lambda scaffolding | (push-lambda) |
+| (push-call) | Pushing new CALL into a call stack | (push-call "printall") |
+| (pull) | Remove and display the value from the current current position of current "stack-of-data" | (pull) |
+| (pull-raw) | Remove and dump the value from the current current position of current "stack-of-data" | (pull-raw) |
+| (vm-clear) | Reset VM to the original and empty state | (vm-clear) |
+| (vm-call) | Execute CALL from call stack | (vm-call "printall") |
+| (vm-exec) | Execute CALL from ether call stack or applicativeor functor or lambda | (vm-exec "printall") |
+| (display-vm-lambdas) | Print the list of registered lambdas | (display-vm-lambdas) |
+| (display-vm-lambda name) | Print the content of registered lambda | (display-vm-lambda "answer") |
