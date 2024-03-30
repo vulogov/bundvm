@@ -163,4 +163,6 @@ You can call *(full-status)* at any time.
 
 | Command     | Description | Example     |
 |:------------|:------------|:------------|
-| (push-integer <number>) | Pushing integer value to the current position of current "stack-of-data" | (push-integer 42) |
+| (push-integer number) | Pushing integer value to the current position of current "stack-of-data" | (push-integer 42) |
+| (push-float number ) | Pushing float value to the current position of current "stack-of-data" | (push-float 3.14) |
+| (push-string string ) | Pushing string value to the current position of current "stack-of-data" | (push-string "Hello world") |
