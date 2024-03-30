@@ -96,6 +96,8 @@ Hello world!
 
 You can request an interactive REPL prompt and interact with the Virtual Machine by entering shell commands. BUND shell is a LISP interpreter, and for adventurous users, it provides the full power of the LISP to automate and explore the BUND Virtual Machine. I will not venture into teaching you a LISP course, but I will tell you the commands you can use to change the Machine state and execute primitives and, eventually, lambdas.
 
+### My first interactive command in VM shell
+
 First, how you can execute the shell and check the status of VM:
 
 ```
@@ -154,3 +156,12 @@ The command (full-status) will display you the following information:
 Then you will see the list of names of the "stack-of-data" elements
 Next you will see the dump of the elements in your current "stack-of-data"
 And last, you will see the elements in call stack.
+
+You can call *(full-status)* at any time.
+
+### What is my other shell commands?
+
+| Command | Description | Example |
+|--------:|:------------|:--------|
+| (push-integer <number>) | Pushing integer value to the current position of current "stack-of-data" | (push-integer 42) |
+ 
