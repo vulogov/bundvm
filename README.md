@@ -161,7 +161,6 @@ You can call *(full-status)* at any time.
 
 ### What is my other shell commands?
 
-| Command | Description | Example |
-|--------:|:------------|:--------|
+| Command     | Description | Example     |
+|------------:|:------------|:------------|
 | (push-integer <number>) | Pushing integer value to the current position of current "stack-of-data" | (push-integer 42) |
- 
