@@ -1,0 +1,2 @@
+{"type": "STRING", "value": "Hello world!"}
+{"type": "CALL", "value": "print"}

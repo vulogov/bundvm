@@ -122,3 +122,18 @@ pub fn vm_shell_push_call(s: String) {
         }
     }
 }
+
+pub fn vm_shell_push_ptr(s: String) {
+    log::debug!("Pushing ptr {} into VM", s);
+    match vm_json::vm_json_ptr::vm_json_push_ptr(
+        json!({
+            "type":     "PTR",
+            "value":    s.clone(),
+        })
+    ) {
+        Ok(_) => {}
+        Err(err) => {
+            vm_shell::vm_shell_error(format!("{}", err).to_string());
+        }
+    }
+}

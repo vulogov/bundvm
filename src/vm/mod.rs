@@ -13,6 +13,7 @@ pub mod vm_callstack;
 pub mod vm_error;
 pub mod vm_push;
 pub mod vm_lambda;
+pub mod vm_route;
 
 #[derive(Clone)]
 pub struct BUNDCore {

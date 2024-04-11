@@ -1,0 +1,3 @@
+(push-string "Hello world!")
+(push-ptr "print")
+(vm-exec "execute")

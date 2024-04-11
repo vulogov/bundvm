@@ -8,3 +8,4 @@ pub mod vm_json_lambda;
 pub mod vm_json_separator;
 pub mod vm_json_route;
 pub mod vm_json_execute;
+pub mod vm_json_ptr;

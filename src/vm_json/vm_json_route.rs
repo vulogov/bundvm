@@ -33,6 +33,9 @@ pub fn vm_json_route(obj: serde_json::Value) -> Result<(), Error> {
                                 "CALL" => {
                                     return vm_json_execute::vm_json_execute(obj);
                                 }
+                                "PTR" => {
+                                    return vm_json_ptr::vm_json_push_ptr(obj);
+                                }
                                 "LAMBDA" => {
                                     return vm_json_lambda::vm_json_push_lambda(obj);
                                 }

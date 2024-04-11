@@ -6,6 +6,7 @@ use rust_dynamic::types::{CALL, LAMBDA};
 
 impl BUNDCore {
     pub fn push(&mut self, v: Value) -> Result<(), Error> {
+        log::debug!("vm.push(): {:?}", &v);
         if self.lambda_scaffolding() {
             match v.dt {
                 LAMBDA => {
